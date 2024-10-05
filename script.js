@@ -328,7 +328,7 @@ const firebaseConfig = {
         editProductModal.style.display = 'none'; // Close the modal
       } catch (error) {
         console.error("حدث خطأ أثناء تحديث المنتج:", error);
-        showToast('Error updating product. Please try again.', 'error');
+        showToast('حدث خطأ أثناء تحديث المنتج. يرجى المحاولة مرة أخرى.', 'error');
       }
     };
   
@@ -366,7 +366,7 @@ const firebaseConfig = {
       }
     }).catch(error => {
       console.error("Error searching products:", error);
-      showToast('Error searching products. Please try again.', 'error');
+      showToast('خطأ في البحث عن المنتجات. يرجى المحاولة مرة أخرى.', 'error');
     });
   }
   
@@ -391,19 +391,19 @@ const firebaseConfig = {
     const cardBody = document.createElement('div');
     cardBody.classList.add('card-body', 'd-flex', 'flex-column');
   
-    const titleEn = document.createElement('h5');
-    titleEn.classList.add('card-title');
-    titleEn.textContent = product.name_en;
-    cardBody.appendChild(titleEn);
-  
-    const titleAr = document.createElement('h6');
-    titleAr.classList.add('card-subtitle', 'mb-2', 'text-muted');
+    const titleAr = document.createElement('h5');
+    titleAr.classList.add('card-title');
     titleAr.textContent = product.name_ar;
     cardBody.appendChild(titleAr);
   
+    const titleEn = document.createElement('h6');
+    titleEn.classList.add('card-subtitle', 'mb-2', 'text-muted');
+    titleEn.textContent = product.name_en;
+    cardBody.appendChild(titleEn);
+  
     const stock = document.createElement('p');
     stock.classList.add('card-text');
-    stock.textContent = `Stock: ${product.stock_count}`;
+    stock.textContent = `الكمية الماحة: ${product.stock_count}`;
     cardBody.appendChild(stock);
   
     // Reservation Form
@@ -415,7 +415,7 @@ const firebaseConfig = {
     quantityInput.type = 'number';
     quantityInput.min = 1;
     quantityInput.max = product.stock_count;
-    quantityInput.placeholder = 'Quantity';
+    quantityInput.placeholder = 'الكمية';
     quantityInput.classList.add('form-control', 'mb-2');
     quantityInput.required = true;
     reservationForm.appendChild(quantityInput);
@@ -423,7 +423,7 @@ const firebaseConfig = {
     // Recipient Name
     const recipientNameInput = document.createElement('input');
     recipientNameInput.type = 'text';
-    recipientNameInput.placeholder = 'Recipient Name';
+    recipientNameInput.placeholder = 'اسم المستلم';
     recipientNameInput.classList.add('form-control', 'mb-2');
     recipientNameInput.required = true;
     reservationForm.appendChild(recipientNameInput);
@@ -431,7 +431,7 @@ const firebaseConfig = {
     // Recipient Mobile Number
     const recipientMobileInput = document.createElement('input');
     recipientMobileInput.type = 'text';
-    recipientMobileInput.placeholder = 'Recipient Mobile Number';
+    recipientMobileInput.placeholder = 'رقم موبايل المستلم';
     recipientMobileInput.classList.add('form-control', 'mb-2');
     recipientMobileInput.required = true;
     reservationForm.appendChild(recipientMobileInput);
@@ -458,7 +458,7 @@ const firebaseConfig = {
   
     const defaultOption = document.createElement('option');
     defaultOption.value = '';
-    defaultOption.textContent = 'Select Unit';
+    defaultOption.textContent = 'اختر الوحدة';
     unitSelect.appendChild(defaultOption);
   
     units.forEach(unit => {
@@ -544,7 +544,7 @@ const firebaseConfig = {
     const reserveBtn = document.createElement('button');
     reserveBtn.type = 'submit';
     reserveBtn.classList.add('btn', 'btn-primary', 'btn-block');
-    reserveBtn.textContent = 'Reserve';
+    reserveBtn.textContent = 'احجز الان';
     reservationForm.appendChild(reserveBtn);
   
     // Reservation Form Handler
@@ -563,22 +563,22 @@ const firebaseConfig = {
   
       // Validate Inputs
       if (quantity < 1) {
-        showToast('Please enter a valid quantity.', 'warning');
+        showToast('الرجاء إدخال كمية صالحة.', 'warning');
         return;
       }
   
       if (quantity > product.stock_count) {
-        showToast('Requested quantity exceeds available stock.', 'error');
+        showToast('الكمية المطلوبة تتجاوز المخزون المتاح.', 'error');
         return;
       }
   
       if (!recipientName || !recipientMobile || !unit) {
-        showToast('Please fill in all the fields.', 'warning');
+        showToast('يرجى ملء جميع الحقول.', 'warning');
         return;
       }
   
       if (!startTime || !endTime) {
-        showToast('Please select both start and end times.', 'warning');
+        showToast('الرجاء تحديد وقتي البدء والانتهاء.', 'warning');
         return;
       }
   
@@ -586,25 +586,25 @@ const firebaseConfig = {
       const endDate = new Date(endTime);
   
       if (isNaN(startDate) || isNaN(endDate)) {
-        showToast('Invalid date format.', 'error');
+        showToast('تنسيق التاريخ غير صالح.', 'error');
         return;
       }
   
       if (endDate <= startDate) {
-        showToast('End time must be after start time.', 'warning');
+        showToast('يجب أن يكون وقت الانتهاء بعد وقت البدء.', 'warning');
         return;
       }
   
       try {
         if (isRecurring) {
           if (!frequency || !recurrenceEnd) {
-            showToast('Please select frequency and recurrence end date.', 'warning');
+            showToast('الرجاء تحديد التكرار وتاريخ انتهاء التكرار.', 'warning');
             return;
           }
   
           const recurrenceEndDateObj = new Date(recurrenceEnd);
           if (isNaN(recurrenceEndDateObj)) {
-            showToast('Invalid recurrence end date.', 'error');
+            showToast('تاريخ انتهاء التكرار غير صالح.', 'error');
             return;
           }
   
@@ -613,7 +613,7 @@ const firebaseConfig = {
   
           // Check if recurrence end date is before start date
           if (recurrenceEndDateObj < currentStartDate) {
-            showToast('Recurrence end date must be after start date.', 'warning');
+            showToast('يجب أن يكون تاريخ انتهاء التكرار بعد تاريخ البدء.', 'warning');
             return;
           }
   
@@ -622,7 +622,7 @@ const firebaseConfig = {
             const productDoc = await db.collection('products').doc(productId).get();
             const productData = productDoc.data();
             if (productData.stock_count < quantity) {
-              showToast('Insufficient stock for recurring reservation on ' + currentStartDate.toLocaleDateString(), 'error');
+              showToast('مخزون غير كاف للحجز المتكرر على ' + currentStartDate.toLocaleDateString(), 'error');
               break;
             }
   
@@ -660,7 +660,7 @@ const firebaseConfig = {
             }
           }
   
-          showToast('Recurring reservation created successfully.', 'success');
+          showToast('تم إنشاء الحجز المتكرر بنجاح.', 'success');
         } else {
           // Decrease stock immediately
           await db.collection('products').doc(productId).update({
@@ -683,13 +683,13 @@ const firebaseConfig = {
             updated_at: firebase.firestore.FieldValue.serverTimestamp()
           });
   
-          showToast('Reservation created successfully.', 'success');
+          showToast('تم إنشاء الحجز بنجاح.', 'success');
         }
   
         reservationForm.reset();
       } catch (error) {
-        console.error("Error creating reservation:", error);
-        showToast('Error creating reservation. Please try again.', 'error');
+        console.error("خطأ في إنشاء الحجز:", error);
+        showToast('حدث خطأ أثناء إنشاء الحجز. يرجى المحاولة مرة أخرى.', 'error');
       }
     });
   
@@ -761,7 +761,7 @@ const firebaseConfig = {
               cancelBtn.textContent = 'Cancel';
               cancelBtn.classList.add('btn', 'btn-warning', 'btn-sm');
               cancelBtn.addEventListener('click', async () => {
-                if (confirm('Are you sure you want to cancel this reservation?')) {
+                if (confirm('هل أنت متأكد أنك تريد إلغاء هذا الحجز؟')) {
                   try {
                     // Update reservation status to 'Cancelled' and mark stock_restored as true
                     await db.collection('reservations').doc(doc.id).update({
@@ -775,10 +775,10 @@ const firebaseConfig = {
                       stock_count: firebase.firestore.FieldValue.increment(reservation.quantity)
                     });
   
-                    showToast('Reservation cancelled and stock restored.', 'success');
+                    showToast('تم إلغاء الحجز واستعادة المخزون.', 'success');
                   } catch (error) {
-                    console.error("Error cancelling reservation:", error);
-                    showToast('Error cancelling reservation. Please try again.', 'error');
+                    console.error("خطأ في إلغاء الحجز:", error);
+                    showToast('حدث خطأ أثناء إلغاء الحجز. يرجى المحاولة مرة أخرى.', 'error');
                   }
                 }
               });
@@ -792,7 +792,7 @@ const firebaseConfig = {
           });
         });
       }, error => {
-        console.error("Error loading user reservations:", error);
+        console.error("خطأ في تحميل حجوزات المستخدم:", error);
       });
   }
   
@@ -855,10 +855,10 @@ const firebaseConfig = {
                       status: 'Approved',
                       updated_at: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                    showToast('Reservation approved.', 'success');
+                    showToast('تمت الموافقة على الحجز.', 'success');
                   } catch (error) {
-                    console.error("Error approving reservation:", error);
-                    showToast('Error approving reservation. Please try again.', 'error');
+                    console.error("خطأ في الموافقة على الحجز:", error);
+                    showToast('خطأ في الموافقة على الحجز. يرجى المحاولة مرة أخرى.', 'error');
                   }
                 });
                 actionsTd.appendChild(approveBtn);
@@ -867,7 +867,7 @@ const firebaseConfig = {
                 declineBtn.textContent = 'Decline';
                 declineBtn.classList.add('btn', 'btn-danger', 'btn-sm');
                 declineBtn.addEventListener('click', async () => {
-                  if (confirm('Are you sure you want to decline this reservation?')) {
+                  if (confirm('هل أنت متأكد أنك تريد رفض هذا الحجز؟')) {
                     try {
                       // Update reservation status to 'Declined' and mark stock_restored as true
                       await db.collection('reservations').doc(doc.id).update({
@@ -881,10 +881,10 @@ const firebaseConfig = {
                         stock_count: firebase.firestore.FieldValue.increment(reservation.quantity)
                       });
   
-                      showToast('Reservation declined and stock restored.', 'success');
+                      showToast('تم رفض الحجز واستعادة المخزون.', 'success');
                     } catch (error) {
-                      console.error("Error declining reservation:", error);
-                      showToast('Error declining reservation. Please try again.', 'error');
+                      console.error("خطأ في رفض الحجز:", error);
+                      showToast('حدث خطأ أثناء رفض الحجز. يرجى المحاولة مرة أخرى.', 'error');
                     }
                   }
                 });
@@ -899,7 +899,7 @@ const firebaseConfig = {
           });
         });
       }, error => {
-        console.error("Error loading all reservations for approval:", error);
+        console.error("خطأ في تحميل جميع الحجوزات للموافقة عليها:", error);
       });
   }
   
@@ -932,7 +932,7 @@ const firebaseConfig = {
       const role = newUserRole.value;
   
       if (!email || !password || !role) {
-        showToast('Please fill in all fields.', 'warning');
+        showToast('يرجى ملء جميع الحقول.', 'warning');
         return;
       }
   
@@ -948,12 +948,12 @@ const firebaseConfig = {
           created_at: firebase.firestore.FieldValue.serverTimestamp()
         });
   
-        showToast('User created successfully.', 'success');
+        showToast('تم إنشاء المستخدم بنجاح.', 'success');
         createUserForm.reset();
         createUserModal.style.display = 'none';
         loadRoles(); // Refresh roles if necessary
       } catch (error) {
-        console.error("Error creating user:", error);
+        console.error("خطأ في إنشاء المستخدم:", error);
         showToast(error.message, 'error');
       }
     });
@@ -973,7 +973,7 @@ const firebaseConfig = {
       const roleName = newRoleName.value.trim();
   
       if (!roleName) {
-        showToast('Please enter a role name.', 'warning');
+        showToast('الرجاء إدخال اسم الدور.', 'warning');
         return;
       }
   
@@ -984,13 +984,13 @@ const firebaseConfig = {
           created_at: firebase.firestore.FieldValue.serverTimestamp()
         });
   
-        showToast('Role created successfully.', 'success');
+        showToast('تم إنشاء الدور بنجاح.', 'success');
         createRoleForm.reset();
         createRoleModal.style.display = 'none';
         loadRoles(); // Refresh roles
       } catch (error) {
-        console.error("Error creating role:", error);
-        showToast('Error creating role. Please try again.', 'error');
+        console.error("خطأ في إنشاء الدور:", error);
+        showToast('حدث خطأ أثناء إنشاء الدور. يرجى المحاولة مرة أخرى.', 'error');
       }
     });
   }
@@ -1014,14 +1014,14 @@ const firebaseConfig = {
         newUserRole.appendChild(option);
       });
     }).catch(error => {
-      console.error("Error loading roles:", error);
+      console.error("خطأ في تحميل الأدوار:", error);
     });
   }
   
   // Admin - Switch to User Mode
   if (switchUserModeBtn) {
     switchUserModeBtn.addEventListener('click', () => {
-      showToast('Switching to User Mode.', 'info');
+      showToast('التبديل إلى وضع المستخدم.', 'info');
       showUserSection();
     });
   }
@@ -1052,7 +1052,7 @@ const firebaseConfig = {
       .get()
       .then(snapshot => {
         if (snapshot.empty) {
-          console.log('No reservations to restore stock.');
+          console.log('لا توجد تحفظات لاستعادة المخزون.');
           return;
         }
   
@@ -1078,10 +1078,10 @@ const firebaseConfig = {
         return batch.commit();
       })
       .then(() => {
-        console.log('Stock restoration process completed.');
+        console.log('اكتملت عملية استعادة المخزون.');
       })
       .catch(error => {
-        console.error('Error restoring stock:', error);
+        console.error('خطأ في استعادة المخزون:', error);
       });
   }
   
