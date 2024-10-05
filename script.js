@@ -260,7 +260,7 @@ const firebaseConfig = {
   
         // Edit Button
         const editBtn = document.createElement('button');
-        editBtn.textContent = 'Edit';
+        editBtn.textContent = 'تعديل';
         editBtn.classList.add('btn', 'btn-primary', 'btn-sm', 'mr-2');
         editBtn.addEventListener('click', () => {
           openEditProductModal(doc.id, product);
@@ -269,7 +269,7 @@ const firebaseConfig = {
   
         // Delete Button
         const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = 'Delete';
+        deleteBtn.textContent = 'مسح';
         deleteBtn.classList.add('btn', 'btn-danger', 'btn-sm');
         deleteBtn.addEventListener('click', () => {
           if (confirm('هل أنت متأكد أنك تريد حذف هذا المنتج؟')) {
